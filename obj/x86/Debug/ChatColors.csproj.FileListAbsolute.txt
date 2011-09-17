@@ -1,0 +1,12 @@
+C:\Users\Michael\Downloads\TShock Current\ServerPlugins\TShockAPI.XML
+C:\Users\Michael\Downloads\TShockPluginTemplate\TShockPluginTemplate\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Michael\Downloads\TShockPluginTemplate\TShockPluginTemplate\obj\x86\Debug\TShockPluginTemplate.dll
+C:\Users\Michael\Downloads\TShockPluginTemplate\TShockPluginTemplate\obj\x86\Debug\TShockPluginTemplate.pdb
+C:\Users\Michael\Downloads\ChatColor\TShockPluginTemplate\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Michael\Downloads\TShock Test\ServerPlugins\TShockAPI.XML
+C:\Users\Michael\Downloads\TShock Test\ServerPlugins\ChatColors.dll
+C:\Users\Michael\Downloads\TShock Test\ServerPlugins\ChatColors.pdb
+C:\Users\Michael\Downloads\ChatColor\TShockPluginTemplate\obj\x86\Debug\ChatColors.dll
+C:\Users\Michael\Downloads\ChatColor\TShockPluginTemplate\obj\x86\Debug\ChatColors.pdb
+C:\Users\Michael\Downloads\TShock Current\ServerPlugins\ChatColors.dll
+C:\Users\Michael\Downloads\TShock Current\ServerPlugins\ChatColors.pdb

@@ -1,0 +1,13 @@
+C:\Users\Michael\Downloads\TShockPluginTemplate\TShockPluginTemplate\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Michael\Documents\TShock\TShock\serverplugins\TShockPluginTemplate.dll
+C:\Users\Michael\Documents\TShock\TShock\serverplugins\TShockPluginTemplate.pdb
+C:\Users\Michael\Downloads\TShockPluginTemplate\TShockPluginTemplate\obj\x86\Debug\TShockPluginTemplate.dll
+C:\Users\Michael\Downloads\TShockPluginTemplate\TShockPluginTemplate\obj\x86\Debug\TShockPluginTemplate.pdb
+C:\Users\Michael\Documents\TShock2\TShock\serverplugins\TShockPluginTemplate.dll
+C:\Users\Michael\Documents\TShock2\TShock\serverplugins\TShockPluginTemplate.pdb
+C:\Users\Michael\Downloads\TShock 3.3.3.906\ServerPlugins\TShockPluginTemplate.dll
+C:\Users\Michael\Downloads\TShock 3.3.3.906\ServerPlugins\TShockPluginTemplate.pdb
+C:\Users\Michael\Downloads\TShock 3.3.1.905\deploy\serverplugins\TShockPluginTemplate.dll
+C:\Users\Michael\Downloads\TShock 3.3.1.905\deploy\serverplugins\TShockPluginTemplate.pdb
+C:\Users\Michael\Downloads\TShock 3.3.0.0903\deploy\serverplugins\TShockPluginTemplate.dll
+C:\Users\Michael\Downloads\TShock 3.3.0.0903\deploy\serverplugins\TShockPluginTemplate.pdb
