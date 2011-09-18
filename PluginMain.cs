@@ -71,6 +71,7 @@ namespace PluginTemplate
             SQLWriter.EnsureExists(table);
             bool color = false;
             bool othercolor = false;
+            bool admincolor = false;
 
             foreach (Group group in TShock.Groups.groups)
             {
@@ -80,6 +81,8 @@ namespace PluginTemplate
                         color = true;
                     if (group.HasPermission("otherchatcolor"))
                         othercolor = true;
+                    if (group.HasPermission("adminchatcolor"))
+                        admincolor = true;
                 }
             }
             List<string> permlist = new List<string>();
@@ -90,25 +93,41 @@ namespace PluginTemplate
             if (!othercolor)
                 permlist.Add("otherchatcolor");
             TShock.Groups.AddPermissions("trustedadmin", permlist);
+            permlist = new List<string>();
+            if (!admincolor)
+                permlist.Add("adminchatcolor");
+            TShock.Groups.AddPermissions("trustedadmin", permlist);
 
             Commands.ChatCommands.Add(new Command("chatcolor", ChatColor, "chatcolor"));
             Commands.ChatCommands.Add(new Command("otherchatcolor", OtherChatColor, "otherchatcolor"));
+            Commands.ChatCommands.Add(new Command("adminchatcolor", blockChatColor, "blockchatcolor"));
+            Commands.ChatCommands.Add(new Command("adminchatcolor", unblockChatColor, "unblockchatcolor"));
         }
-
-        
 
         public void OnChat(messageBuffer msg, int ply, string text, HandledEventArgs e)
         {
-            if (TShock.Players[ply].IsLoggedIn)
+            try
             {
-
-                int RowID = SearchTable(SQLEditor.ReadColumn("ChatColor", "Name", new List<SqlValue>()), TShock.Players[ply].UserAccountName);
-                if (RowID != -1)
+                if (TShock.Players[ply].IsLoggedIn)
                 {
 
-                    TShock.Players[ply].Group.R = Convert.ToByte(SQLEditor.ReadColumn("ChatColor", "R", new List<SqlValue>())[RowID].ToString());
-                    TShock.Players[ply].Group.G = Convert.ToByte(SQLEditor.ReadColumn("ChatColor", "G", new List<SqlValue>())[RowID].ToString());
-                    TShock.Players[ply].Group.B = Convert.ToByte(SQLEditor.ReadColumn("ChatColor", "B", new List<SqlValue>())[RowID].ToString());
+                    int RowID = SearchTable(SQLEditor.ReadColumn("ChatColor", "Name", new List<SqlValue>()), TShock.Players[ply].UserAccountName);
+                    if ((RowID != -1) && (Convert.ToBoolean(SQLEditor.ReadColumn("ChatColor", "CanChange", new List<SqlValue>())[RowID])))
+                    {
+
+                        TShock.Players[ply].Group.R = Convert.ToByte(SQLEditor.ReadColumn("ChatColor", "R", new List<SqlValue>())[RowID].ToString());
+                        TShock.Players[ply].Group.G = Convert.ToByte(SQLEditor.ReadColumn("ChatColor", "G", new List<SqlValue>())[RowID].ToString());
+                        TShock.Players[ply].Group.B = Convert.ToByte(SQLEditor.ReadColumn("ChatColor", "B", new List<SqlValue>())[RowID].ToString());
+
+                    }
+                    else
+                    {
+
+                        TShock.Players[ply].Group.R = 255;
+                        TShock.Players[ply].Group.G = 255;
+                        TShock.Players[ply].Group.B = 255;
+
+                    }
 
                 }
                 else
@@ -119,16 +138,8 @@ namespace PluginTemplate
                     TShock.Players[ply].Group.B = 255;
 
                 }
-
             }
-            else
-            {
-
-                TShock.Players[ply].Group.R = 255;
-                TShock.Players[ply].Group.G = 255;
-                TShock.Players[ply].Group.B = 255;
-
-            }
+            catch (Exception) { Console.Write("Chat color for user " + TShock.Players[ply].Name + " isn't working."); }
         }
 
         public static void ChatColor(CommandArgs args)
@@ -160,6 +171,13 @@ namespace PluginTemplate
                     if (SearchTable(SQLEditor.ReadColumn("ChatColor", "Name", new List<SqlValue>()), args.Player.UserAccountName) != -1)
                     {
 
+                        int temp = SearchTable(SQLEditor.ReadColumn("ChatColor", "Name", new List<SqlValue>()), args.Player.UserAccountName);
+                        if ((temp != -1) && (!Convert.ToBoolean(SQLEditor.ReadColumn("ChatColor", "CanChange", new List<SqlValue>())[temp])))
+                        {
+
+                            args.Player.SendMessage("You've been blocked from using Chat Colors by an Admin.", System.Drawing.Color.Red); return;
+
+                        }
                         List<SqlValue> values = new List<SqlValue>();
                         values.Add(new SqlValue("R", text1));
                         values.Add(new SqlValue("G", text2));
@@ -303,12 +321,211 @@ namespace PluginTemplate
                         }   
 
                     }
-                args.Player.SendMessage("Text Color for " + text[3] + " successfully changed!", text1, text2, text3); return;
+                args.Player.SendMessage("Text Color for " + text[3] + " successfully changed! (blocked users will still have white text, though)", text1, text2, text3); return;
             }
             else
             {
 
                 args.Player.SendMessage("Not enough arguments. Format is /otherchatcolor Red Green Blue Username", System.Drawing.Color.Red);
+                return;
+
+            }
+        }
+        public static void blockChatColor(CommandArgs args)
+        {
+            if (args.Parameters.Count >= 1)
+            {
+                string[] text;
+                text = new string[100];
+                int i = 0;
+
+                foreach (string word in args.Parameters)
+                {
+                    text[i] = word;
+                    i += 1;
+                }
+                if (SearchTable(SQLEditor.ReadColumn("ChatColor", "Name", new List<SqlValue>()), text[3]) != -1)
+                {
+
+                    List<SqlValue> values = new List<SqlValue>();
+                    values.Add(new SqlValue("CanChange", 0));
+                    List<SqlValue> where = new List<SqlValue>();
+                    where.Add(new SqlValue("Name", "'" + text[0] + "'"));
+                    SQLEditor.UpdateValues("ChatColor", values, where);
+
+                }
+                else if (SearchTable(SQLEditor.ReadColumn("Users", "Username", new List<SqlValue>()), text[3]) != -1)
+                {
+
+                    List<SqlValue> list = new List<SqlValue>();
+                    list.Add(new SqlValue("Name", "'" + text[0] + "'"));
+                    list.Add(new SqlValue("CanChange", 0));
+                    list.Add(new SqlValue("R", 255));
+                    list.Add(new SqlValue("G", 255));
+                    list.Add(new SqlValue("B", 255));
+                    SQLEditor.InsertValues("ChatColor", list);
+
+                }
+                else
+                {
+
+                    var players = Tools.FindPlayer(text[0]);
+                    if (players.Count == 0)
+                    {
+
+                        args.Player.SendMessage("Invalid player.", System.Drawing.Color.Red); return;
+
+                    }
+                    else if (players.Count > 1)
+                    {
+
+                        args.Player.SendMessage("More than one player matched.", System.Drawing.Color.Red); return;
+
+                    }
+                    else
+                    {
+                        if (players[0].IsLoggedIn)
+                        {
+
+                            if (SearchTable(SQLEditor.ReadColumn("ChatColor", "Name", new List<SqlValue>()), players[0].UserAccountName) != -1)
+                            {
+
+                                List<SqlValue> values = new List<SqlValue>();
+                                values.Add(new SqlValue("CanChange", 0));
+                                List<SqlValue> where = new List<SqlValue>();
+                                where.Add(new SqlValue("Name", "'" + players[0].UserAccountName + "'"));
+                                SQLEditor.UpdateValues("ChatColor", values, where);
+
+                            }
+                            else if (SearchTable(SQLEditor.ReadColumn("Users", "Username", new List<SqlValue>()), players[0].UserAccountName) != -1)
+                            {
+
+                                List<SqlValue> list = new List<SqlValue>();
+                                list.Add(new SqlValue("Name", "'" + players[0].UserAccountName + "'"));
+                                list.Add(new SqlValue("CanChange", 0));
+                                list.Add(new SqlValue("R", 255));
+                                list.Add(new SqlValue("G", 255));
+                                list.Add(new SqlValue("B", 255));
+                                SQLEditor.InsertValues("ChatColor", list);
+
+                            }
+
+                        }
+                        else
+                        {
+
+                            args.Player.SendMessage("Player " + text[0] + " needs to be logged in, or you need to type his/her account name.", System.Drawing.Color.Red); return;
+
+                        }
+                    }
+
+                }
+                args.Player.SendMessage(text[0] + " has been successfully blocked from using chat colors."); return;
+            }
+            else
+            {
+
+                args.Player.SendMessage("Not enough arguments. Format is /blockchatcolor Username", System.Drawing.Color.Red);
+                return;
+
+            }
+        }
+
+        public static void unblockChatColor(CommandArgs args)
+        {
+            if (args.Parameters.Count >= 1)
+            {
+                string[] text;
+                text = new string[100];
+                int i = 0;
+
+                foreach (string word in args.Parameters)
+                {
+                    text[i] = word;
+                    i += 1;
+                }
+                if (SearchTable(SQLEditor.ReadColumn("ChatColor", "Name", new List<SqlValue>()), text[3]) != -1)
+                {
+
+                    List<SqlValue> values = new List<SqlValue>();
+                    values.Add(new SqlValue("CanChange", 1));
+                    List<SqlValue> where = new List<SqlValue>();
+                    where.Add(new SqlValue("Name", "'" + text[0] + "'"));
+                    SQLEditor.UpdateValues("ChatColor", values, where);
+
+                }
+                else if (SearchTable(SQLEditor.ReadColumn("Users", "Username", new List<SqlValue>()), text[3]) != -1)
+                {
+
+                    List<SqlValue> list = new List<SqlValue>();
+                    list.Add(new SqlValue("Name", "'" + text[0] + "'"));
+                    list.Add(new SqlValue("CanChange", 1));
+                    list.Add(new SqlValue("R", 255));
+                    list.Add(new SqlValue("G", 255));
+                    list.Add(new SqlValue("B", 255));
+                    SQLEditor.InsertValues("ChatColor", list);
+
+                }
+                else
+                {
+
+                    var players = Tools.FindPlayer(text[0]);
+                    if (players.Count == 0)
+                    {
+
+                        args.Player.SendMessage("Invalid player.", System.Drawing.Color.Red); return;
+
+                    }
+                    else if (players.Count > 1)
+                    {
+
+                        args.Player.SendMessage("More than one player matched.", System.Drawing.Color.Red); return;
+
+                    }
+                    else
+                    {
+                        if (players[0].IsLoggedIn)
+                        {
+
+                            if (SearchTable(SQLEditor.ReadColumn("ChatColor", "Name", new List<SqlValue>()), players[0].UserAccountName) != -1)
+                            {
+
+                                List<SqlValue> values = new List<SqlValue>();
+                                values.Add(new SqlValue("CanChange", 1));
+                                List<SqlValue> where = new List<SqlValue>();
+                                where.Add(new SqlValue("Name", "'" + players[0].UserAccountName + "'"));
+                                SQLEditor.UpdateValues("ChatColor", values, where);
+
+                            }
+                            else if (SearchTable(SQLEditor.ReadColumn("Users", "Username", new List<SqlValue>()), players[0].UserAccountName) != -1)
+                            {
+
+                                List<SqlValue> list = new List<SqlValue>();
+                                list.Add(new SqlValue("Name", "'" + players[0].UserAccountName + "'"));
+                                list.Add(new SqlValue("CanChange", 1));
+                                list.Add(new SqlValue("R", 255));
+                                list.Add(new SqlValue("G", 255));
+                                list.Add(new SqlValue("B", 255));
+                                SQLEditor.InsertValues("ChatColor", list);
+
+                            }
+
+                        }
+                        else
+                        {
+
+                            args.Player.SendMessage("Player " + text[0] + " needs to be logged in, or you need to type his/her account name.", System.Drawing.Color.Red); return;
+
+                        }
+                    }
+
+                }
+                args.Player.SendMessage(text[0] + " has been successfully unblocked from using chat colors."); return;
+            }
+            else
+            {
+
+                args.Player.SendMessage("Not enough arguments. Format is /unblockchatcolor Username", System.Drawing.Color.Red);
                 return;
 
             }
