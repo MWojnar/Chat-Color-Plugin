@@ -10,3 +10,10 @@ C:\Users\Michael\Downloads\ChatColor\TShockPluginTemplate\obj\x86\Debug\ChatColo
 C:\Users\Michael\Downloads\ChatColor\TShockPluginTemplate\obj\x86\Debug\ChatColors.pdb
 C:\Users\Michael\Downloads\TShock Current\ServerPlugins\ChatColors.dll
 C:\Users\Michael\Downloads\TShock Current\ServerPlugins\ChatColors.pdb
+C:\Users\Michael\Downloads\TShock Current\TShock 3.3.4.924\ChatColors.dll
+C:\Users\Michael\Downloads\TShock Current\TShock 3.3.4.924\ChatColors.pdb
+C:\Users\Michael\Downloads\TShock Current\TShock 3.3.4.924\ServerPlugins\ChatColors.dll
+C:\Users\Michael\Downloads\TShock Current\TShock 3.3.4.924\ServerPlugins\ChatColors.pdb
+C:\Users\Michael\Downloads\TShock 3.3.4.924\ServerPlugins\TShockAPI.XML
+C:\Users\Michael\Downloads\TShock 3.3.4.924\ServerPlugins\ChatColors.dll
+C:\Users\Michael\Downloads\TShock 3.3.4.924\ServerPlugins\ChatColors.pdb

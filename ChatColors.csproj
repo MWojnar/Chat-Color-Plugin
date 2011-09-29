@@ -20,11 +20,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\TShock Current\ServerPlugins\</OutputPath>
+    <OutputPath>..\..\TShock 3.3.4.924\ServerPlugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>C:\Users\Michael\Downloads\TShock Current\ServerPlugins\TShockAPI.XML</DocumentationFile>
+    <DocumentationFile>C:\Users\Michael\Downloads\TShock 3.3.4.924\ServerPlugins\TShockAPI.XML</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
@@ -74,16 +74,13 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
-    <Reference Include="TerrariaServer">
-      <HintPath>Refs\TerrariaServer.exe</HintPath>
-    </Reference>
-    <Reference Include="TerrariaServerAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="TerrariaServ, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\TShock 3.3.3.906 (1)\TerrariaServerAPI.dll</HintPath>
+      <HintPath>..\..\TShock 3.3.4.924\TerrariaServ.exe</HintPath>
     </Reference>
-    <Reference Include="TShockAPI, Version=3.3.3.906, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="TShockAPI, Version=3.3.4.924, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\TShock 3.3.3.906\ServerPlugins\TShockAPI.dll</HintPath>
+      <HintPath>..\..\TShock 3.3.4.924\ServerPlugins\TShockAPI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

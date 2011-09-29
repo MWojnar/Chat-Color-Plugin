@@ -7,8 +7,7 @@ using Community.CsharpSqlite.SQLiteClient;
 using MySql.Data.MySqlClient;
 using Microsoft.Xna.Framework;
 using Terraria;
-using TerrariaAPI;
-using TerrariaAPI.Hooks;
+using Hooks;
 using TShockAPI;
 using TShockAPI.DB;
 using System.ComponentModel;
@@ -47,10 +46,13 @@ namespace PluginTemplate
             GameHooks.Initialize += OnInitialize;
             ServerHooks.Chat += OnChat;
         }
-        public override void DeInitialize()
+        protected override void  Dispose(bool disposing)
         {
-            GameHooks.Initialize -= OnInitialize;
-            ServerHooks.Chat -= OnChat;
+            if (disposing)
+            {
+                GameHooks.Initialize -= OnInitialize;
+                ServerHooks.Chat -= OnChat;
+            }
         }
         public PluginTemplate(Main game)
             : base(game)
@@ -158,14 +160,14 @@ namespace PluginTemplate
                 byte text1, text2, text3;
 
                 try { text1 = Convert.ToByte(text[0]); }
-                catch (System.FormatException) { args.Player.SendMessage("The Red value was not a proper integer.", System.Drawing.Color.Red); return; }
-                catch (System.OverflowException) { args.Player.SendMessage("The Red value was not an integer between 0 and 255.", System.Drawing.Color.Red); return; }
+                catch (System.FormatException) { args.Player.SendMessage("The Red value was not a proper integer.", Color.Red); return; }
+                catch (System.OverflowException) { args.Player.SendMessage("The Red value was not an integer between 0 and 255.", Color.Red); return; }
                 try { text2 = Convert.ToByte(text[1]); }
-                catch (System.FormatException) { args.Player.SendMessage("The Green value was not a proper integer.", System.Drawing.Color.Red); return; }
-                catch (System.OverflowException) { args.Player.SendMessage("The Green value was not an integer between 0 and 255.", System.Drawing.Color.Red); return; }
+                catch (System.FormatException) { args.Player.SendMessage("The Green value was not a proper integer.", Color.Red); return; }
+                catch (System.OverflowException) { args.Player.SendMessage("The Green value was not an integer between 0 and 255.", Color.Red); return; }
                 try { text3 = Convert.ToByte(text[2]); }
-                catch (System.FormatException) { args.Player.SendMessage("The Blue value was not a proper integer.", System.Drawing.Color.Red); return; }
-                catch (System.OverflowException) { args.Player.SendMessage("The Blue value was not an integer between 0 and 255.", System.Drawing.Color.Red); return; }
+                catch (System.FormatException) { args.Player.SendMessage("The Blue value was not a proper integer.", Color.Red); return; }
+                catch (System.OverflowException) { args.Player.SendMessage("The Blue value was not an integer between 0 and 255.", Color.Red); return; }
                 if (args.Player.IsLoggedIn)
                 {
                     if (SearchTable(SQLEditor.ReadColumn("ChatColor", "Name", new List<SqlValue>()), args.Player.UserAccountName) != -1)
@@ -175,7 +177,7 @@ namespace PluginTemplate
                         if ((temp != -1) && (!Convert.ToBoolean(SQLEditor.ReadColumn("ChatColor", "CanChange", new List<SqlValue>())[temp])))
                         {
 
-                            args.Player.SendMessage("You've been blocked from using Chat Colors by an Admin.", System.Drawing.Color.Red); return;
+                            args.Player.SendMessage("You've been blocked from using Chat Colors by an Admin.", Color.Red); return;
 
                         }
                         List<SqlValue> values = new List<SqlValue>();
@@ -204,7 +206,7 @@ namespace PluginTemplate
                 else
                 {
 
-                    args.Player.SendMessage("You need to be logged in to use this command.", System.Drawing.Color.Red); return;
+                    args.Player.SendMessage("You need to be logged in to use this command.", Color.Red); return;
 
                 }
                 args.Player.SendMessage("This is your new text color!  You like? :)", text1, text2, text3); return;
@@ -212,7 +214,7 @@ namespace PluginTemplate
             else
             {
 
-                args.Player.SendMessage("Not enough arguments. Format is /chatcolor Red Green Blue", System.Drawing.Color.Red);
+                args.Player.SendMessage("Not enough arguments. Format is /chatcolor Red Green Blue", Color.Red);
                 return;
 
             }
@@ -233,14 +235,14 @@ namespace PluginTemplate
                 byte text1, text2, text3;
 
                 try { text1 = Convert.ToByte(text[0]); }
-                catch (System.FormatException) { args.Player.SendMessage("The Red value was not a proper integer.", System.Drawing.Color.Red); return; }
-                catch (System.OverflowException) { args.Player.SendMessage("The Red value was not an integer between 0 and 255.", System.Drawing.Color.Red); return; }
+                catch (System.FormatException) { args.Player.SendMessage("The Red value was not a proper integer.", Color.Red); return; }
+                catch (System.OverflowException) { args.Player.SendMessage("The Red value was not an integer between 0 and 255.", Color.Red); return; }
                 try { text2 = Convert.ToByte(text[1]); }
-                catch (System.FormatException) { args.Player.SendMessage("The Green value was not a proper integer.", System.Drawing.Color.Red); return; }
-                catch (System.OverflowException) { args.Player.SendMessage("The Green value was not an integer between 0 and 255.", System.Drawing.Color.Red); return; }
+                catch (System.FormatException) { args.Player.SendMessage("The Green value was not a proper integer.", Color.Red); return; }
+                catch (System.OverflowException) { args.Player.SendMessage("The Green value was not an integer between 0 and 255.", Color.Red); return; }
                 try { text3 = Convert.ToByte(text[2]); }
-                catch (System.FormatException) { args.Player.SendMessage("The Blue value was not a proper integer.", System.Drawing.Color.Red); return; }
-                catch (System.OverflowException) { args.Player.SendMessage("The Blue value was not an integer between 0 and 255.", System.Drawing.Color.Red); return; }
+                catch (System.FormatException) { args.Player.SendMessage("The Blue value was not a proper integer.", Color.Red); return; }
+                catch (System.OverflowException) { args.Player.SendMessage("The Blue value was not an integer between 0 and 255.", Color.Red); return; }
                     if (SearchTable(SQLEditor.ReadColumn("ChatColor", "Name", new List<SqlValue>()), text[3]) != -1)
                     {
 
@@ -272,13 +274,13 @@ namespace PluginTemplate
                         if (players.Count == 0)
                         {
 
-                            args.Player.SendMessage("Invalid player.", System.Drawing.Color.Red); return;
+                            args.Player.SendMessage("Invalid player.", Color.Red); return;
 
                         }
                         else if (players.Count > 1)
                         {
 
-                            args.Player.SendMessage("More than one player matched.", System.Drawing.Color.Red); return;
+                            args.Player.SendMessage("More than one player matched.", Color.Red); return;
 
                         }
                         else
@@ -315,7 +317,7 @@ namespace PluginTemplate
                             else
                             {
 
-                                args.Player.SendMessage("Player " + text[3] + " needs to be logged in, or you need to type his/her account name.", System.Drawing.Color.Red); return;
+                                args.Player.SendMessage("Player " + text[3] + " needs to be logged in, or you need to type his/her account name.", Color.Red); return;
 
                             }
                         }   
@@ -326,7 +328,7 @@ namespace PluginTemplate
             else
             {
 
-                args.Player.SendMessage("Not enough arguments. Format is /otherchatcolor Red Green Blue Username", System.Drawing.Color.Red);
+                args.Player.SendMessage("Not enough arguments. Format is /otherchatcolor Red Green Blue Username", Color.Red);
                 return;
 
             }
@@ -373,13 +375,13 @@ namespace PluginTemplate
                     if (players.Count == 0)
                     {
 
-                        args.Player.SendMessage("Invalid player.", System.Drawing.Color.Red); return;
+                        args.Player.SendMessage("Invalid player.", Color.Red); return;
 
                     }
                     else if (players.Count > 1)
                     {
 
-                        args.Player.SendMessage("More than one player matched.", System.Drawing.Color.Red); return;
+                        args.Player.SendMessage("More than one player matched.", Color.Red); return;
 
                     }
                     else
@@ -414,7 +416,7 @@ namespace PluginTemplate
                         else
                         {
 
-                            args.Player.SendMessage("Player " + text[0] + " needs to be logged in, or you need to type his/her account name.", System.Drawing.Color.Red); return;
+                            args.Player.SendMessage("Player " + text[0] + " needs to be logged in, or you need to type his/her account name.", Color.Red); return;
 
                         }
                     }
@@ -425,7 +427,7 @@ namespace PluginTemplate
             else
             {
 
-                args.Player.SendMessage("Not enough arguments. Format is /blockchatcolor Username", System.Drawing.Color.Red);
+                args.Player.SendMessage("Not enough arguments. Format is /blockchatcolor Username", Color.Red);
                 return;
 
             }
@@ -473,13 +475,13 @@ namespace PluginTemplate
                     if (players.Count == 0)
                     {
 
-                        args.Player.SendMessage("Invalid player.", System.Drawing.Color.Red); return;
+                        args.Player.SendMessage("Invalid player.", Color.Red); return;
 
                     }
                     else if (players.Count > 1)
                     {
 
-                        args.Player.SendMessage("More than one player matched.", System.Drawing.Color.Red); return;
+                        args.Player.SendMessage("More than one player matched.", Color.Red); return;
 
                     }
                     else
@@ -514,7 +516,7 @@ namespace PluginTemplate
                         else
                         {
 
-                            args.Player.SendMessage("Player " + text[0] + " needs to be logged in, or you need to type his/her account name.", System.Drawing.Color.Red); return;
+                            args.Player.SendMessage("Player " + text[0] + " needs to be logged in, or you need to type his/her account name.", Color.Red); return;
 
                         }
                     }
@@ -525,7 +527,7 @@ namespace PluginTemplate
             else
             {
 
-                args.Player.SendMessage("Not enough arguments. Format is /unblockchatcolor Username", System.Drawing.Color.Red);
+                args.Player.SendMessage("Not enough arguments. Format is /unblockchatcolor Username", Color.Red);
                 return;
 
             }
